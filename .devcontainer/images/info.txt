@@ -1,0 +1,26 @@
+##### USERS #####
+
+Default (and recommended) user is codespace (sudoer).
+
+user: codespace pwd: emul8
+user: root pwd: root
+
+##### SHARING A FOLDER BETWEEN HOST AND GUEST #####
+
+Just a quick tutorial for sharing folders.
+This has already been done for the repository directory (/hostdir directory inside guest)
+
+----
+In host:
+Add option to command line:
+
+-virtfs local,path=/path/to/host/folder/ host,security_model=mapped,mount_tag=hostdir &
+
+--------
+In guest:
+
+Login as root and add same groups as in host for codespaces user.
+
+Later, add to /etc/fstab/
+
+hostdir /path/to/guest/folder 9p _netdev,trans=virtio,version=9p2000.u,msize=104857600 0 0
