@@ -1,0 +1,27 @@
+# copied from qemu repository
+
+/GNUmakefile
+/build/
+/.cache/
+/.vscode/
+*.pyc
+.sdk
+.stgit-*
+.git-submodule-status
+
+## Change below - commenting
+#.clang-format
+
+.gdb_history
+cscope.*
+tags
+TAGS
+GPATH
+GRTAGS
+GTAGS
+*~
+*.ast_raw
+*.depend_raw
+*.swp
+*.patch
+*.gcov

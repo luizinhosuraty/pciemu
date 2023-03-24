@@ -1,0 +1,19 @@
+# top level gitignore
+
+# macOs related
+.DS_Store
+
+# vim
+*.swp
+
+# qcow2 drivers
+*.qcow2
+
+# configurations
+*.conf
+
+# logs
+*.log
+
+# build folders
+build/
