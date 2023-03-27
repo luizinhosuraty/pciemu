@@ -28,8 +28,9 @@ static inline dma_addr_t pciemu_dma_addr_mask(PCIEMUDevice *dev,
 {
     dma_addr_t masked = addr & dev->dma.config.mask;
     if (masked != addr) {
-        qemu_log_mask(LOG_GUEST_ERROR, "masked (%llx) != addr (%llx) \n",
-                      masked, addr);
+        qemu_log_mask(LOG_GUEST_ERROR,
+                      "masked (%" PRIx64 ") != addr (%" PRIx64 ") \n", masked,
+                      addr);
     }
     return masked;
 }
