@@ -1,0 +1,47 @@
+name: "Linux CI"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: "Linux CI"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true' 
+
+      - name: Install Dependencies
+        run: |
+          sudo apt install -y git libglib2.0-dev libfdt-dev \
+            libpixman-1-dev zlib1g-dev ninja-build netcat libssh-dev\
+            libvde-dev libvdeplug-dev libcap-ng-dev libattr1-dev libslirp-dev
+
+      - name: Caches QEMU build
+        id: cache-qemu
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-build-qemu
+          path: |
+            qemu/build
+      
+      - if: ${{ steps.cache-qemu.outputs.cache-hit != 'true' }}
+        name: Configure
+        run: ./setup.sh
+      
+      - name: Build QEMU
+        working-directory: qemu/
+        run: make
+
+      - name: Build Tests
+        working-directory: test/
+        run: make
+      
+      - name: Test
+        working-directory: test/
+        run: make test
