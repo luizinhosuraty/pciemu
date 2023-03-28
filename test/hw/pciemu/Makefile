@@ -16,6 +16,7 @@ fakes_src := qemu.fake.c pciemu_dma.fake.c pciemu_irq.fake.c pciemu_mmio.fake.c
 src_hw_pciemu_dir := $(src_dir)/hw/pciemu
 
 includes += $(addprefix -I, $(qemu_include_dir)\
+	    		    $(include_dir)/hw\
 			    $(qemu_build_include_dir)\
 			    $(src_hw_pciemu_dir))
 
