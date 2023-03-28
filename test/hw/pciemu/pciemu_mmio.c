@@ -31,9 +31,9 @@ TEST(pciemu_mmio_valid_access, "Test the check on wheter MMIO access is valid")
 
 TEST(pciemu_mmio_read, "Test MMIO read operations")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     unsigned int size = sizeof(uint64_t);
-    uint64_t reg_val;
+    uint64_t reg_val = 0;
     uint64_t expect_reg[PCIEMU_HW_BAR0_REG_CNT] = { 0xaa, 0xbb, 0xcc, 0xdd };
     hwaddr reg_addr[PCIEMU_HW_BAR0_REG_CNT] = { PCIEMU_HW_BAR0_REG_0,
                                                 PCIEMU_HW_BAR0_REG_1,
@@ -55,8 +55,8 @@ TEST(pciemu_mmio_read, "Test MMIO read operations")
 
 TEST(pciemu_mmio_write, "Test MMIO write operations")
 {
-    PCIEMUDevice dev;
-    uint64_t val;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
+    uint64_t val = 0;
     unsigned int size = sizeof(uint64_t);
     hwaddr reg_addr[PCIEMU_HW_BAR0_REG_CNT] = { PCIEMU_HW_BAR0_REG_0,
                                                 PCIEMU_HW_BAR0_REG_1,
@@ -108,7 +108,7 @@ TEST(pciemu_mmio_write, "Test MMIO write operations")
 
 TEST(pciemu_mmio_reset, "Test reset of MMIO")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     for (int i = 0; i < PCIEMU_HW_BAR0_REG_CNT; ++i) {
         dev.reg[i] = i + 0xaa;
     }
@@ -120,8 +120,8 @@ TEST(pciemu_mmio_reset, "Test reset of MMIO")
 
 TEST(pciemu_device_init, "Test initialization of MMIO")
 {
-    PCIEMUDevice dev;
-    Error *e;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
+    Error *e = NULL;
     pciemu_mmio_init(&dev, &e);
     EXPECT_EQ(memory_region_init_io_fake.call_count, 1, "Should call once");
 

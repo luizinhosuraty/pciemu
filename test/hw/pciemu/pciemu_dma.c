@@ -19,7 +19,7 @@ DEFINE_FFF_GLOBALS;
 
 TEST(pciemu_dma_addr_mask, "Test masking of DMA address")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     dev.dma.config.mask = DMA_BIT_MASK(32);
     dma_addr_t addr = 0xaaaaaaaabbbbbbbb;
     dma_addr_t masked = pciemu_dma_addr_mask(&dev, addr);
@@ -45,7 +45,7 @@ TEST(pciemu_dma_inside_device_boundaries, "Test DMA area boundaries")
 
 TEST(pciemu_dma_execute, "Test execution of DMA")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     dev.dma.config.mask = DMA_BIT_MASK(PCIEMU_HW_DMA_ADDR_CAPABILITY);
 
     dev.dma.config.cmd = PCIEMU_HW_DMA_DIRECTION_TO_DEVICE;
@@ -95,9 +95,9 @@ TEST(pciemu_dma_execute, "Test execution of DMA")
 
 TEST(pciemu_dma_doorbell_ring, "Test reception of DMA doorbell")
 {
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     RESET_FAKE(address_space_rw);
     RESET_FAKE(pciemu_irq_raise);
-    PCIEMUDevice dev;
     dev.dma.config.mask = DMA_BIT_MASK(PCIEMU_HW_DMA_ADDR_CAPABILITY);
     dev.dma.config.cmd = PCIEMU_HW_DMA_DIRECTION_TO_DEVICE;
     dev.dma.config.txdesc.dst = PCIEMU_HW_DMA_AREA_START;
@@ -119,7 +119,7 @@ TEST(pciemu_dma_doorbell_ring, "Test reception of DMA doorbell")
 
 TEST(pciemu_dma_config_txdesc_src, "Test configuration of DMA txdesc src")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     dev.dma.status = DMA_STATUS_IDLE;
     dma_addr_t src = 0xbeefbeef;
     pciemu_dma_config_txdesc_src(&dev, src);
@@ -133,7 +133,7 @@ TEST(pciemu_dma_config_txdesc_src, "Test configuration of DMA txdesc src")
 
 TEST(pciemu_dma_config_txdesc_dst, "Test configuration of DMA txdesc dst")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     dev.dma.status = DMA_STATUS_IDLE;
     dma_addr_t dst = 0xbeefbeef;
     pciemu_dma_config_txdesc_dst(&dev, dst);
@@ -147,7 +147,7 @@ TEST(pciemu_dma_config_txdesc_dst, "Test configuration of DMA txdesc dst")
 
 TEST(pciemu_dma_config_txdesc_len, "Test configuration of DMA txdesc len")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     dev.dma.status = DMA_STATUS_IDLE;
     dma_size_t len = 0x100;
     pciemu_dma_config_txdesc_len(&dev, len);
@@ -161,7 +161,7 @@ TEST(pciemu_dma_config_txdesc_len, "Test configuration of DMA txdesc len")
 
 TEST(pciemu_dma_config_cmd, "Test configuration of DMA cmd")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     dev.dma.status = DMA_STATUS_IDLE;
     dma_cmd_t cmd = PCIEMU_HW_DMA_DIRECTION_TO_DEVICE;
     pciemu_dma_config_cmd(&dev, cmd);
@@ -174,7 +174,7 @@ TEST(pciemu_dma_config_cmd, "Test configuration of DMA cmd")
 }
 TEST(pciemu_dma_reset, "Test reset of DMA")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     pciemu_dma_reset(&dev);
     EXPECT_EQ(dev.dma.status, DMA_STATUS_IDLE, "Should have IDLE status");
     EXPECT_EQ(dev.dma.config.txdesc.src, 0, "Should be initialized to zero");
@@ -185,8 +185,8 @@ TEST(pciemu_dma_reset, "Test reset of DMA")
 
 TEST(pciemu_dma_init, "Test initialization of DMA")
 {
-    PCIEMUDevice dev;
-    Error *e;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
+    Error *e = NULL;
     pciemu_dma_init(&dev, &e);
     EXPECT_EQ(dev.dma.status, DMA_STATUS_IDLE, "Should have IDLE status");
     EXPECT_EQ(dev.dma.config.txdesc.src, 0, "Should be initialized to zero");
@@ -197,7 +197,7 @@ TEST(pciemu_dma_init, "Test initialization of DMA")
 
 TEST(pciemu_dma_fini, "Test finalization of DMA")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     pciemu_dma_fini(&dev);
     EXPECT_EQ(dev.dma.status, DMA_STATUS_OFF, "Should have OFF status");
     EXPECT_EQ(dev.dma.config.txdesc.src, 0, "Should be initialized to zero");

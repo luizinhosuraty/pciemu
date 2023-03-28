@@ -16,7 +16,7 @@ DEFINE_FFF_GLOBALS;
 
 TEST(pciemu_irq_init_msi, "Test IRQ initialization in MSI mode")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     Error *e = NULL;
     pciemu_irq_init_msi(&dev, &e);
     EXPECT_EQ(msi_init_fake.call_count, 1, "Should call once");
@@ -33,11 +33,9 @@ TEST(pciemu_irq_init_msi, "Test IRQ initialization in MSI mode")
 
 TEST(pciemu_irq_init_intx, "Test IRQ initialization in PIN mode")
 {
-    PCIDevice pdev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     uint8_t pci_conf[PCI_CFG_SPACE_EXP_SIZE];
-    pdev.config = pci_conf;
-    PCIEMUDevice dev;
-    dev.pci_dev = pdev;
+    dev.pci_dev.config = pci_conf;
     Error *e = NULL;
     pciemu_irq_init_intx(&dev, &e);
     EXPECT_EQ(dev.pci_dev.config[PCI_INTERRUPT_PIN], PCIEMU_HW_IRQ_INTX + 1,
@@ -46,7 +44,7 @@ TEST(pciemu_irq_init_intx, "Test IRQ initialization in PIN mode")
 
 TEST(pciemu_irq_raise_intx, "Test IRQ raise in PIN mode")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     pciemu_irq_raise_intx(&dev);
     EXPECT_EQ(pci_set_irq_fake.call_count, 1, "Should call once");
     EXPECT_EQ(pci_set_irq_fake.arg1_val, 1,
@@ -57,7 +55,7 @@ TEST(pciemu_irq_raise_intx, "Test IRQ raise in PIN mode")
 
 TEST(pciemu_irq_raise_msi, "Test IRQ raise in MSI mode")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     unsigned int vector = PCIEMU_IRQ_MAX_VECTORS + 1;
     pciemu_irq_raise_msi(&dev, vector);
     EXPECT_EQ(msi_notify_fake.call_count, 0,
@@ -81,8 +79,8 @@ TEST(pciemu_irq_raise_msi, "Test IRQ raise in MSI mode")
 
 TEST(pciemu_irq_lower_intx, "Test lowering IRQ in PIN mode")
 {
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     RESET_FAKE(pci_set_irq);
-    PCIEMUDevice dev;
     pciemu_irq_lower_intx(&dev);
     EXPECT_EQ(pci_set_irq_fake.call_count, 1, "Should call once");
     EXPECT_EQ(pci_set_irq_fake.arg1_val, 0,
@@ -93,7 +91,7 @@ TEST(pciemu_irq_lower_intx, "Test lowering IRQ in PIN mode")
 
 TEST(pciemu_irq_lower_msi, "Test lowering IRQ in MSI mode")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     unsigned int vector = PCIEMU_IRQ_MAX_VECTORS + 1;
     dev.irq.status.msi.msi_vectors[vector].raised = true;
     pciemu_irq_lower_msi(&dev, vector);
@@ -108,7 +106,7 @@ TEST(pciemu_irq_lower_msi, "Test lowering IRQ in MSI mode")
 
 TEST(pciemu_irq_reset, "Test reset of IRQ")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     pciemu_irq_reset(&dev);
     EXPECT_EQ(
         msi_enabled_fake.call_count,
@@ -126,7 +124,7 @@ TEST(pciemu_irq_init, "Test initialization of IRQ")
 
 TEST(pciemu_irq_fini, "Test finalization of IRQ")
 {
-    PCIEMUDevice dev;
+    PCIEMUDevice dev = { .pci_dev = { .name = "pciemu_test" } };
     pciemu_irq_fini(&dev);
     EXPECT_EQ(msi_uninit_fake.call_count, 1, "Should call once");
 }
