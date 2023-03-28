@@ -1,5 +1,13 @@
-# pciemu
-The pciemu provides an example of PCIe Device Emulation in QEMU.
+<div align="center">
+
+<h1>pciemu</h1>
+
+![License](https://img.shields.io/github/license/luizinhosuraty/pciemu)
+![Build](https://img.shields.io/github/actions/workflow/status/luizinhosuraty/pciemu/linux-ci.yml?label=tests)
+ 
+</div>
+
+pciemu provides an example of PCIe Device Emulation in QEMU.
 
 The idea is to help those willing to explore PCIe devices but do not have access
 to a real hardware. Or maybe someone with research ideas for a new PCIe device
