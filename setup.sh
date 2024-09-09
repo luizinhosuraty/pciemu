@@ -29,7 +29,7 @@ ln -s $REPOSITORY_DIR/include/hw/pciemu_hw.h $REPOSITORY_DIR/src/hw/$REPOSITORY_
 cd qemu
 ./configure \
 	--disable-bsd-user --disable-guest-agent --disable-gtk --disable-werror \
-	--enable-curses --enable-slirp --enable-libssh --enable-vde --enable-virtfs \
+	--enable-curses --enable-slirp --enable-libssh --enable-virtfs \
 	--target-list=x86_64-softmmu
 
 printf "\nSetup finished. You may now build QEMU (cd qemu && make)\n"
