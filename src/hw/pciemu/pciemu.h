@@ -18,7 +18,7 @@
 #define PCIEMU_DEVICE_DESC "PCIEMU Device"
 /*
  * Declare the object type for PCIEMUDevice and all boilerplate code
- * See https://qemu.readthedocs.io/en/latest/devel/qom.html for details
+ * See https://qemu.readthedocs.io/en/master/devel/qom.html for details
  *
  */
 OBJECT_DECLARE_TYPE(PCIEMUDevice, PCIEMUDeviceClass, PCIEMU_DEVICE);
